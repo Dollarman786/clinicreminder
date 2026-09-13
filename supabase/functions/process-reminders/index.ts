@@ -75,26 +75,46 @@ Deno.serve(async req => {
         }
 
         if (channel === 'whatsapp' && !clinic.whatsapp_enabled) {
-  await db.from('reminder_logs').insert({
-    appointment_id: a.id,
-    reminder_type: w.type,
-    channel,
-    status: 'skipped',
-    error: 'WhatsApp reminders disabled'
-  });
+  const { data: existingSkipped } = await db
+    .from('reminder_logs')
+    .select('id')
+    .eq('appointment_id', a.id)
+    .eq('reminder_type', w.type)
+    .eq('channel', channel)
+    .maybeSingle();
+
+  if (!existingSkipped) {
+    await db.from('reminder_logs').insert({
+      appointment_id: a.id,
+      reminder_type: w.type,
+      channel,
+      status: 'skipped',
+      error: 'WhatsApp reminders disabled'
+    });
+  }
 
   skipped++;
   continue;
 }
 
 if (channel === 'email' && !clinic.email_enabled) {
-  await db.from('reminder_logs').insert({
-    appointment_id: a.id,
-    reminder_type: w.type,
-    channel,
-    status: 'skipped',
-    error: 'Email reminders disabled'
-  });
+  const { data: existingSkipped } = await db
+    .from('reminder_logs')
+    .select('id')
+    .eq('appointment_id', a.id)
+    .eq('reminder_type', w.type)
+    .eq('channel', channel)
+    .maybeSingle();
+
+  if (!existingSkipped) {
+    await db.from('reminder_logs').insert({
+      appointment_id: a.id,
+      reminder_type: w.type,
+      channel,
+      status: 'skipped',
+      error: 'Email reminders disabled'
+    });
+  }
 
   skipped++;
   continue;
