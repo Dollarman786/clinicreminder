@@ -55,7 +55,7 @@ create table if not exists reminder_logs (
   appointment_id uuid not null references appointments(id) on delete cascade,
   reminder_type text not null check (reminder_type in ('confirmation','24h','2h')),
   channel text not null check (channel in ('whatsapp','email')),
-  status text not null default 'pending' check (status in ('pending','sent','failed')),
+  status text not null default 'pending' check (status in ('pending','sent','failed','skipped')),
   provider_message_id text,
   error text,
   sent_at timestamptz,

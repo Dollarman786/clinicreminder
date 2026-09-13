@@ -75,14 +75,30 @@ Deno.serve(async req => {
         }
 
         if (channel === 'whatsapp' && !clinic.whatsapp_enabled) {
-          skipped++;
-          continue;
-        }
+  await db.from('reminder_logs').insert({
+    appointment_id: a.id,
+    reminder_type: w.type,
+    channel,
+    status: 'skipped',
+    error: 'WhatsApp reminders disabled'
+  });
 
-        if (channel === 'email' && !clinic.email_enabled) {
-          skipped++;
-          continue;
-        }
+  skipped++;
+  continue;
+}
+
+if (channel === 'email' && !clinic.email_enabled) {
+  await db.from('reminder_logs').insert({
+    appointment_id: a.id,
+    reminder_type: w.type,
+    channel,
+    status: 'skipped',
+    error: 'Email reminders disabled'
+  });
+
+  skipped++;
+  continue;
+}
 
         const { data: existing } = await db
           .from('reminder_logs')
