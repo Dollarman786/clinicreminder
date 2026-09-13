@@ -7,9 +7,9 @@ Deno.serve(async req => {
 
   const secret = Deno.env.get('CRON_SECRET');
 
-  if (secret && req.headers.get('x-cron-secret') !== secret) {
-    return json({ error: 'Unauthorized' }, 401);
-  }
+if (!secret || req.headers.get('x-cron-secret') !== secret) {
+  return json({ error: 'Unauthorized' }, 401);
+}
 
   const db = adminClient();
   const now = new Date();
