@@ -30,4 +30,18 @@ await ClinicReminder.createAppointment({patient_name,phone,email,appointment_at,
   if (!email) {
     $('authmsg').textContent = 'Enter your email address first.';
     return;
-  }boot();</script></body></html>
+  }
+
+  const { error } = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://clinicreminder-chi.vercel.app/'
+  });
+
+  $('authmsg').textContent = error
+    ? error.message
+    : 'Password reset email sent. Check your inbox.';
+}
+
+boot();
+</script>
+</body>
+</html>
