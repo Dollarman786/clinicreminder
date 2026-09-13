@@ -121,17 +121,22 @@ if (channel === 'email' && !clinic.email_enabled) {
 }
 
         const { data: existing } = await db
-          .from('reminder_logs')
-          .select('id')
-          .eq('appointment_id', a.id)
-          .eq('reminder_type', w.type)
-          .eq('channel', channel)
-          .maybeSingle();
+  .from('reminder_logs')
+  .select('id,status')
+  .eq('appointment_id', a.id)
+  .eq('reminder_type', w.type)
+  .eq('channel', channel)
+  .maybeSingle();
 
-        if (existing) {
-          skipped++;
-          continue;
-        }
+if (existing?.status === 'skipped') {
+  await db
+    .from('reminder_logs')
+    .delete()
+    .eq('id', existing.id);
+} else if (existing) {
+  skipped++;
+  continue;
+}
 
         try {
           let id = null;
