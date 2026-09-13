@@ -1,1 +1,60 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ClinicReminder example</title></head><body><form id="appointment"><input id="name" placeholder="Patient name" required><input id="phone" placeholder="+60123456789"><input id="email" type="email" placeholder="Email"><input id="date" type="datetime-local" required><input id="service" placeholder="Service"><button>Book appointment</button></form><div id="msg"></div><script src="./clinicreminder.js"></script><script>ClinicReminder.configure({apiUrl:'https://YOUR-PROJECT.supabase.co',apiKey:'cr_live_YOUR_KEY'});document.querySelector('#appointment').addEventListener('submit',async e=>{e.preventDefault();try{await ClinicReminder.createAppointment({patient_name:name.value,phone:phone.value,email:email.value,appointment_at:new Date(date.value).toISOString(),service:service.value});msg.textContent='Appointment submitted successfully.';e.target.reset();}catch(err){msg.textContent=err.message;}});</script></body></html>
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ClinicReminder example</title>
+</head>
+
+<body>
+
+<h2>ClinicReminder Test Form</h2>
+
+<input id="apiKey" type="password" placeholder="Clinic API key">
+
+<form id="appointment">
+  <input id="name" placeholder="Patient name" required>
+  <input id="phone" placeholder="+60123456789">
+  <input id="email" type="email" placeholder="Email">
+  <input id="date" type="datetime-local" required>
+  <input id="service" placeholder="Service">
+  <button type="submit">Book appointment</button>
+</form>
+
+<div id="msg"></div>
+
+<script src="./clinicreminder.js"></script>
+
+<script>
+document.querySelector('#appointment').addEventListener('submit', async e => {
+  e.preventDefault();
+
+  const apiKey = document.querySelector('#apiKey').value;
+
+  ClinicReminder.configure({
+    apiUrl: 'https://pyrtgspmafedlglomqgx.supabase.co',
+    apiKey: apiKey
+  });
+
+  try {
+    await ClinicReminder.createAppointment({
+      patient_name: document.querySelector('#name').value,
+      phone: document.querySelector('#phone').value,
+      email: document.querySelector('#email').value,
+      appointment_at: new Date(document.querySelector('#date').value).toISOString(),
+      service: document.querySelector('#service').value
+    });
+
+    document.querySelector('#msg').textContent =
+      'Appointment submitted successfully.';
+
+    e.target.reset();
+
+  } catch (err) {
+    document.querySelector('#msg').textContent = err.message;
+  }
+});
+</script>
+
+</body>
+</html>
