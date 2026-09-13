@@ -96,12 +96,6 @@ sb.auth.onAuthStateChange((event, session) => {
     $('authmsg').textContent =
       'Enter and confirm your new password.';
   }
-});    passwordRecoveryMode = true;
-
-    document.getElementById('recoveryPanel').style.display = 'block';
-    document.getElementById('authmsg').textContent =
-      'Enter and confirm your new password.';
-  }
 });
 
 async function updatePassword() {
