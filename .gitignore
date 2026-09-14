@@ -4,3 +4,4 @@ supabase/.temp/
 node_modules/
 .DS_Store
 Thumbs.dbdashboard/index.before-hardening.html
+dashboard/index.before-hardening.html
