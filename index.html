@@ -43,7 +43,9 @@ html,body{min-height:100%}body{margin:0;font-family:Inter,ui-sans-serif,system-u
   }
 }async function signIn(){const {error}=await sb.auth.signInWithPassword({email:$('email').value,password:$('password').value});if(error)return $('authmsg').textContent=error.message;showApp()}async function signUp(){const {error}=await sb.auth.signUp({email:$('email').value,password:$('password').value});$('authmsg').textContent=error?error.message:'Account created. Check your email if confirmation is enabled, then sign in.'}async function signOut(){await sb.auth.signOut();location.reload()}async function showApp(){ $('login').classList.add('hidden');$('app').classList.remove('hidden');const {data:{user}}=await sb.auth.getUser();const {data:m}=await sb.from('clinic_users').select('clinic_id').eq('user_id',user.id).maybeSingle();if(!m){$('onboard').classList.remove('hidden');return}$('main').classList.remove('hidden');await loadClinic(m.clinic_id);
 await loadAll();
-await loadIntegration();}async function createClinic(){const {data,error}=await sb.rpc('create_clinic',{p_name:$('cname').value,p_doctor:$('doctor').value,p_email:$('cemail').value,p_phone:$('cphone').value,p_domain:$('domain').value});if(error)return toast(error.message);clinic={id:data.clinic_id};$('onboard').classList.add('hidden');$('main').classList.remove('hidden');$('keybox').textContent=data.api_key;toast('Clinic created. Save this API key now.');await loadClinic(clinic.id);await loadAll()}async function loadClinic(id){const {data,error}=await sb.from('clinics').select('*').eq('id',id).single();if(error)return toast(error.message);clinic=data;$('clinicLabel').textContent=data.name;$('sname').value=data.name;$('sdoctor').value=data.doctor_name||'';$('semail').value=data.email||'';$('sphone').value=data.phone||'';$('sdomain').value=data.website_domain||'';$('stimezone').value=data.timezone;$('wEnabled').checked=data.whatsapp_enabled;$('eEnabled').checked=data.email_enabled;$('r24').checked=data.reminder_24h;$('r2').checked=data.reminder_2h;$('snippet').value=`<script src="https://clinicreminder-chi.vercel.app/widget/clinicreminder.js"><\/script>
+await loadIntegration();;
+await loadIntegration();}async function createClinic(){const {data,error}=await sb.rpc('create_clinic',{p_name:$('cname').value,p_doctor:$('doctor').value,p_email:$('cemail').value,p_phone:$('cphone').value,p_domain:$('domainawait loadClinic(m.clinic_id)
+').value});if(error)return toast(error.message);clinic={id:data.clinic_id};$('onboard').classList.add('hidden');$('main').classList.remove('hidden');$('keybox').textContent=data.api_key;toast('Clinic created. Save this API key now.');await loadClinic(clinic.id);await loadAll()}async function loadClinic(id){const {data,error}=await sb.from('clinics').select('*').eq('id',id).single();if(error)return toast(error.message);clinic=data;$('clinicLabel').textContent=data.name;$('sname').value=data.name;$('sdoctor').value=data.doctor_name||'';$('semail').value=data.email||'';$('sphone').value=data.phone||'';$('sdomain').value=data.website_domain||'';$('stimezone').value=data.timezone;$('wEnabled').checked=data.whatsapp_enabled;$('eEnabled').checked=data.email_enabled;$('r24').checked=data.reminder_24h;$('r2').checked=data.reminder_2h;$('snippet').value=`<script src="https://clinicreminder-chi.vercel.app/widget/clinicreminder.js"><\/script>
 <script>
 ClinicReminder.configure({apiUrl:'${SUPABASE_URL}',apiKey:'YOUR_CLINIC_API_KEY'});
 // After your existing form validation:
@@ -132,9 +134,8 @@ sb.auth.onAuthStateChange((event, session) => {
 
     $('recoveryPanel').style.display = 'block';
 
-    $('authmsg').textContent =async function saveIntegration(){const {error}=await sb.from('clinic_integrations').upsert({clinic_id:clinic.id,whatsapp_phone_number_id:$('waid').value,whatsapp_business_account_id:$('waba').value,whatsapp_access_token:$('watoken').value||null,resend_from:$('rfrom').value||null,updated_at:new Date().toISOString()});toast(error?error.message:'Integration saved')}
-
-      'Enter and confirm your new password.';
+    $$('authmsg').textContent =
+  'Enter and confirm your new password.';
   }
 });
 
