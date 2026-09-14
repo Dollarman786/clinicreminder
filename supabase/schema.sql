@@ -123,7 +123,14 @@ drop policy if exists logs_select on reminder_logs;
 create policy logs_select on reminder_logs for select using (exists(select 1 from appointments a where a.id=appointment_id and public.is_clinic_member(a.clinic_id)));
 
 drop policy if exists integration_all on clinic_integrations;
-create policy integration_all on clinic_integrations for all using (public.is_clinic_member(clinic_id)) with check (public.is_clinic_member(clinic_id));
+
+revoke all privileges
+on table public.clinic_integrations
+from anon, authenticated;
+
+grant all privileges
+on table public.clinic_integrations
+to service_role;
 
 drop policy if exists webhook_select on webhook_events;
 create policy webhook_select on webhook_events for select using (public.is_clinic_member(clinic_id));
