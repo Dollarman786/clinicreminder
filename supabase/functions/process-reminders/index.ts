@@ -150,7 +150,7 @@ if (existing?.status === 'skipped') {
               [
                 a.patient_name,
                 clinic.name,
-                clinic.doctor_name || '',
+                clinic.doctor_name || 'your doctor',
                 dt
               ]
             );

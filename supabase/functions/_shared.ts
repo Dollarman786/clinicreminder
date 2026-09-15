@@ -33,7 +33,7 @@ export async function sendWhatsApp(clinic: any, to: string, templateName: string
   const language = Deno.env.get('WHATSAPP_TEMPLATE_LANGUAGE') || 'en_US';
   const r = await fetch(`https://graph.facebook.com/${version}/${integration.whatsapp_phone_number_id}/messages`, {
     method:'POST', headers:{Authorization:`Bearer ${integration.whatsapp_access_token}`,'Content-Type':'application/json'},
-    body: JSON.stringify({messaging_product:'whatsapp',recipient_type:'individual',to:cleanPhone(to),type:'template',template:{name:templateName,language:{code:language},components:[{type:'body',parameters:params.map(text=>({type:'text',text}))}]}})
+    body: JSON.stringify({messaging_product:'whatsapp',recipient_type:'individual',to:cleanPhone(to),type:'template',template:{name:templateName,language:{code:language},components:[{type:'body',parameters:params.map(text=>({type:'text',text}))},{type:'button',sub_type:'quick_reply',index:'0',parameters:[{type:'payload',payload:'CONFIRM'}]},{type:'button',sub_type:'quick_reply',index:'1',parameters:[{type:'payload',payload:'RESCHEDULE'}]},{type:'button',sub_type:'quick_reply',index:'2',parameters:[{type:'payload',payload:'CANCEL'}]}]}})
   });
   const j = await r.json(); if(!r.ok) throw new Error(j?.error?.message || 'WhatsApp API error');
   return j?.messages?.[0]?.id || null;
